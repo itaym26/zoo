@@ -1,0 +1,11 @@
+﻿  Animal.cpp
+  Fly.cpp
+  Horse.cpp
+  Insect.cpp
+  Lion.cpp
+  Mammel.cpp
+  Source.cpp
+  Zoo.cpp
+  Generating Code...
+C:\Users\itaym\source\repos\zoo_project\Zoo.cpp(62,1): warning C4715: 'Zoo::findAnimalByName': not all control paths return a value
+  zoo_project.vcxproj -> C:\Users\itaym\source\repos\zoo_project\x64\Debug\zoo_project.exe
