@@ -3,8 +3,8 @@
 Mammel::Mammel() {
 	this->_animalType = 1;
 	cout << "(Mammel)Mammel got milke (y/n)? ";
-	char t;
-	cin >> t;
+	char t = 'n';
+	if (!(cin >> t)) throw "invalid milk response";
 	if (t == 'Y' || t == 'y')
 		this->_gotMilk = true;
 	else
