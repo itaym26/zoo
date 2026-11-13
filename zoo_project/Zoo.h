@@ -16,6 +16,9 @@ private:
 public:
 	Zoo(string n);
 	~Zoo();
+	// Zoo owns its Animal pointers; copying would double-delete them.
+	Zoo(const Zoo&) = delete;
+	Zoo& operator=(const Zoo&) = delete;
 	void printAllAnimal()const;
 	void animalParty()const;
 	void sortAnimalByName();
@@ -24,4 +27,3 @@ public:
 	int findAnimalByName()const;
 	void MENU();
 };
-
