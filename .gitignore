@@ -1,0 +1,16 @@
+# Visual Studio generated files
+.vs/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+*.obj
+*.pdb
+*.idb
+*.ilk
+*.exe
+*.aps
+*.vcxproj.user
+
+# Local command-line builds
+/build/
