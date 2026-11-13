@@ -1,8 +1,8 @@
 #include "Horse.h"
-Horse::Horse() {
+Horse::Horse() : _speed(0) {
 	this->_animalType = 4;
 	cout << "(Horse) Horse speed";
-	cin >> this->_speed;
+	if (!(cin >> this->_speed)) throw "invalid speed";
 	cout << "(Horse) Horse constructed" << endl;
 }
 Horse:: ~Horse() {
