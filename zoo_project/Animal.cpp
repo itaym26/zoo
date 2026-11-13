@@ -1,10 +1,10 @@
 #include "Animal.h"
 
-Animal::Animal(){
+Animal::Animal() : _animalType(0), _animalAge(0) {
 	cout << "(Animal)Enter the animal's name:";
-	cin >> this->_animalName;
+	if (!(cin >> this->_animalName)) throw "invalid animal name";
 	cout << "(Animal) ENTER THE ANIMAL'S AGE:";
-	cin >> this->_animalAge;
+	if (!(cin >> this->_animalAge)) throw "invalid animal age";
 	if (this->_animalAge < 0) {
 		this->_animalAge = 1;
 			throw "age is out of rang";
