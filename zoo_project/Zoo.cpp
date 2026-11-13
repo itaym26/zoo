@@ -1,8 +1,10 @@
 
 #include "Zoo.h"
 #include <string>
+#include <limits>
+#include <memory>
 
-Zoo::Zoo(string n) :_arr(NULL), _size(0), _name(n) { cout << "Zoo constructed..." << endl; }
+Zoo::Zoo(string n) :_name(n), _arr(NULL), _size(0) { cout << "Zoo constructed..." << endl; }
 Zoo::~Zoo() {
 	for (int i = 0; i < this->_size; i++)
 		delete this->_arr[i];
@@ -57,17 +59,10 @@ int Zoo::findAnimalByName()const{
 	for (int i = 0; i < this->_size; i++) {
 		if (this->_arr[i]->getName() == t)
 			return i;
-		return -1;
 	}
+	return -1;
 }
 void Zoo::addAnimal() {
-	Animal** newArr = new Animal * [this->_size + 1];
-	for (int i = 0; i < this->_size; i++)
-		newArr[i] = this->_arr[i];
-
-	delete[] this->_arr;
-	this->_arr = newArr;
-	this->_size++;
 
 	cout << "Which animal type do you want to add?" << endl;
 	cout << "Sub menu:" << endl;
@@ -81,32 +76,41 @@ void Zoo::addAnimal() {
 
 	int choice;
 	cout << "Your choice: ";
-	cin >> choice;
+	if (!(cin >> choice)) return;
+	std::unique_ptr<Animal> animal;
 
 	switch (choice) {
 	case 0:
-		this->_arr[this->_size - 1] = new Animal();
+		animal.reset(new Animal());
 		break;
 	case 1:
-		this->_arr[this->_size - 1] = new Mammel();
+		animal.reset(new Mammel());
 		break;
 	case 2:
-		this->_arr[this->_size - 1] = new Insect();
+		animal.reset(new Insect());
 		break;
 	case 3:
-		this->_arr[this->_size - 1] = new Lion();
+		animal.reset(new Lion());
 		break;
 	case 4:
-		this->_arr[this->_size - 1] = new Horse();
+		animal.reset(new Horse());
 		break;
 	case 5:
-		this->_arr[this->_size - 1] = new Fly();
+		animal.reset(new Fly());
 		break;
 	default:
 		cout << "Invalid choice. Adding regular animal by default." << endl;
-		this->_arr[this->_size - 1] = new Animal();
+		animal.reset(new Animal());
 	}
 
+	// Construct and allocate before changing ownership or size.
+	std::unique_ptr<Animal*[]> newArr(new Animal*[this->_size + 1]);
+	for (int i = 0; i < this->_size; ++i) newArr[i] = this->_arr[i];
+	newArr[this->_size] = animal.get();
+	delete[] this->_arr;
+	this->_arr = newArr.release();
+	animal.release();
+	++this->_size;
 	cout << "Animal added..." << endl;
 }
 
@@ -116,11 +120,10 @@ void Zoo::removeAnimalByName() {
 		cout << "The animal not exists" << endl;
 		return;
 	}
-	delete this->_arr[index];
-	this->_arr[index] = this->_arr[this->_size - 1];
 	Animal** temp = new Animal * [this->_size - 1];
-	for (int i = 0; i < this->_size - 1; i++) 
-		temp[i] = this->_arr[i];
+	for (int i = 0; i < this->_size - 1; i++)
+		temp[i] = (i == index) ? this->_arr[this->_size - 1] : this->_arr[i];
+	delete this->_arr[index];
 	delete[]this->_arr;
 	this->_size--;
 	this->_arr = temp;
@@ -140,7 +143,14 @@ void Zoo::MENU() {
 		cout << "6)Remove animal by name" << endl;
 		cout << "7) EXIT" << endl;
 		cout << "Your choice:";
-		cin >> choice;
+		if (!(cin >> choice)) {
+			if (cin.eof()) return;
+			cin.clear();
+			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			cout << "Please enter a menu number." << endl;
+			continue;
+		}
+		try {
 		switch (choice)
 		{
 		case 1: this->printAllAnimal();
@@ -163,6 +173,9 @@ void Zoo::MENU() {
 			return;
 		default:
 			cout << "Wrong choice,Please try again" << endl;
+		}
+		} catch (const char* error) {
+			cout << "Could not add animal: " << error << endl;
 		}
 
 	}
