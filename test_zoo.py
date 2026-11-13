@@ -14,6 +14,12 @@ CASES = [
     ('nonnumeric age', '5\n0\nInvalid\nabc\n7\n', ['Could not add animal:', 'Please enter a menu number.']),
     ('invalid menu input', 'abc\n7\n', ['Please enter a menu number.']),
     ('end of input', '', ['Zoo deleted...']),
+    ('mammal truncated input', '5\n1\nMilk\n3\n', ['Could not add animal:']),
+    ('insect invalid legs', '5\n2\nBug\n2\nabc\n7\n', ['Could not add animal:']),
+    ('lion invalid volume', '5\n3\nLeo\n2\ny\nabc\n7\n', ['Could not add animal:']),
+    ('horse invalid speed', '5\n4\nHorse\n2\ny\nabc\n7\n', ['Could not add animal:']),
+    ('fly invalid lifetime', '5\n5\nFly\n1\n6\nabc\n7\n', ['Could not add animal:']),
+    ('insect polymorphic noise', '5\n2\nBug\n2\n6\n2\n7\n', ['(Insect) Insect nois']),
 ]
 with tempfile.TemporaryDirectory() as directory:
     binary = Path(directory) / 'zoo'
@@ -25,4 +31,4 @@ with tempfile.TemporaryDirectory() as directory:
         for text in expected:
             assert text in result.stdout, (name, text, result.stdout)
         print('PASS:', name)
-print('All 7 regression scenarios passed. This does not cover every derived-animal input path.')
+print(f'All {len(CASES)} regression scenarios passed. This is targeted coverage, not complete API verification.')
