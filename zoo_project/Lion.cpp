@@ -1,8 +1,8 @@
 #include "Lion.h"
-Lion::Lion() {
+Lion::Lion() : _volume(0) {
 	this->_animalType = 3;
 	cout << "(Lion)Lion volume";
-	cin >> this->_volume;
+	if (!(cin >> this->_volume)) throw "invalid volume";
 	cout << "(Lion)Lion constructed"<<endl;
 }
 Lion:: ~Lion() {
