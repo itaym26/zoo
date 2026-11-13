@@ -1,8 +1,8 @@
 #include "Fly.h"
-Fly::Fly () {
+Fly::Fly() : _lifeTime(0) {
 	this->_animalType = 5;
 	cout << "(Fly) Fly life time";
-	cin >> this->_lifeTime;
+	if (!(cin >> this->_lifeTime)) throw "invalid lifetime";
 	cout << "(Fly)Fly constructed" << endl;
 }
 Fly:: ~Fly() {
