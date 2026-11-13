@@ -8,6 +8,6 @@ public:
 	Insect();
 	virtual~Insect();
 	virtual void print()const;
-	virtual void makeNose()const;
+	void makeNoise() const override;
+	virtual void makeNose() const; // Legacy spelling retained for compatibility.
 };
-
